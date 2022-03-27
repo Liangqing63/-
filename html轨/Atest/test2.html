@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+       
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <script src="jquery.min.js"></script>
+        <script src="./PapaParse/papaparse.min.js"></script>
+
+</head>
+
+<body>
+    <input id="upload_input" class="hide" type="file" accept=".csv" onchange="onUpload(this)" />
+    <script type="text/javascript">
+        function onUpload(input) {
+            //	校验文件
+            var file = input.files[0];
+            var reader = new FileReader();
+            if (typeof reader == 'undefined') {
+                showTip("您的浏览器暂不支持该功能", false);
+                return;
+            }
+            var fileName = file.name;
+            var pointIndex = fileName.lastIndexOf(".");
+            var fileSuffix = fileName.substr(pointIndex);
+            if (fileSuffix == ".CSV" || fileSuffix == ".csv") {
+                try {
+                    reader.readAsText(file, 'utf-8');
+                    reader.onload = function (f) {
+                        if (!isEmpty(this.result)) {
+                            uploadContent = this.result;
+                            //submit();
+                        } else {
+                            showTip("上传的文件为空！", false);
+                        }
+                        input.value = '';
+                    }
+                } catch (e) {
+                    showTip("读取文件失败！", false);
+                    console.log(e);
+                }
+            } else {
+                showTip("您选择的文件不是CSV格式", false);
+            }
+    </script>
+</body>
+
+</html>
